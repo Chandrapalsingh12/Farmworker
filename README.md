@@ -1,3 +1,4 @@
+<img src="https://media.licdn.com/dms/image/C4D22AQHWV2hPWB6r_A/feedshare-shrink_2048_1536/0/1674470975152?e=1677110400&v=beta&t=mmmUCsUsVrdPS-8Zx2SRfK8BLw58eFxZge4WOs0abCo" alt="Image" />
 <h1><center>FARMWORKER Plant Diseases Prediction App </center></h1>
 <h2>Technology used in this app</h2>
 <ul>
