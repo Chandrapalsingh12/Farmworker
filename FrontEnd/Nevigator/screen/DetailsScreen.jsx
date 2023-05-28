@@ -38,11 +38,11 @@ const handelModel = async(e)=>{
       name: image.uri,
       type: 'image/jpgeg'
     })  
-  // let formData = new FormData()work
+  // let formData = new FormData()
   //   formData.append('images', image.uri)
 
   //   console.log(formData);
-    await fetch('ENTER_FLASK_SERVER_URL/image', {
+    await fetch('http://127.0.0.1:80/image', {
       method: 'POST',
       body: data,
       mode:'cors',
@@ -53,7 +53,7 @@ const handelModel = async(e)=>{
       setLoading(false)
     })
     .catch((error) => {
-      alert("Somthing Went wrong please choose another image.")
+      alert("Somthing went wrong Please Try again Later!")
       setLoading(false)       
       setImage(null)
     })

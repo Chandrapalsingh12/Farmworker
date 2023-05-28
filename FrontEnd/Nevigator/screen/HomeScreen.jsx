@@ -1,90 +1,127 @@
-import { StyleSheet, Text, View, FlatList,Image} from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { firebase } from '../../config'
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Image,
+  Button,
+  TouchableOpacity,
+  Alert,
+  RefreshControl,
+} from "react-native";
+import { firebase } from "../../config";
+import { useNavigation } from "@react-navigation/native";
+import Background from "../../components/Background";
 
-import Background from '../../components/Background';
+export default function HomeScreen() {
+  const [posts, setPosts] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const navigation = useNavigation();
 
-export default function HomeScreen({navigation}) {
-  const[posts,setPosts] = useState(null);
-  const[loading,setLoading] = useState(true)
-  
-
-useEffect(()=>{
-    const fetchPost = async()=>{
-      try{
-        const list = []
-         await firebase.firestore()
-        .collection('posts')
+  const fetchPosts = async () => {
+    try {
+      const list = [];
+      await firebase
+        .firestore()
+        .collection("posts")
         .get()
-        .then((querySnapshot)=>{
-          // console.log('Total Posts',querySnapshot.size);
-          querySnapshot.forEach(doc=>{
-            const {post,postImg,postTime,timeperhr,name,number,email} = doc.data()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const {
+              post,
+              postImg,
+              postTime,
+              timeperhr,
+              name,
+              number,
+              email,
+            } = doc.data();
             list.push({
-              id:doc.id,
-              post:post,
-              postImg:postImg,
-              postTime:postTime,
-              timeperhr:timeperhr,
-              name:name,
-              number:number,
-              email:email
-
-            })
-          })
-        })
-        console.log('Posts',list.length);
-        setPosts(list)
-
-        if(loading){
-          setLoading(false)
-        }
-
-      }
-      catch(e){
-        console.log(e);
-      
-      }
+              id: doc.id,
+              post: post,
+              postImg: postImg,
+              postTime: postTime,
+              timeperhr: timeperhr,
+              name: name,
+              number: number,
+              email: email,
+            });
+          });
+        });
+      setPosts(list);
+      setLoading(false);
+    } catch (e) {
+      console.log(e);
     }
-    fetchPost()
+  };
 
-  },[])
+  useEffect(() => {
+    fetchPosts();
+  }, []);
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchPosts();
+    setRefreshing(false);
+  };
+
+  const onAddToCart = (product) => {
+    console.log(product.id);
+    if (product.status === "sold out") {
+      Alert.alert("Product is already sold out");
+      return;
+    }
+    // update the product status to 'sold out'
+    firebase.firestore().collection("Posts").doc(product.id).update({});
+    Alert.alert(`Success! ${product.post} has been purchased`);
+  };
 
   return (
-    
     <View style={styles.container}>
-      <Text style={{textAlign:"center",fontSize:25,padding:10}}>Tools</Text>
+      <Text style={{ textAlign: "center", fontSize: 25, padding: 10 }}>
+        Tools
+      </Text>
       <FlatList
-      data={posts}
-      renderItem={({item})=>
-      <Background>
-      <View style={styles.androidLarge1}>
-        <View style={styles.cardView}>
-          <View style={styles.rectangleView} />
-          <Image
-            style={styles.rocksWaterPlanets157183384Icon}
-            resizeMode="cover"
-            source={{uri:item.postImg}}
-          />
-          <Text style={styles.tractorText}>{item.post}</Text>
-          <Text style={styles.hourText}>{item.timeperhr} / Hour</Text>
-          <Text style={styles.contactNo918392942424}>
-            Contact No: {item.number}
-          </Text>
-          <Text style={styles.emailBsjefgmailcomText}>
-            Email: {item.email}
-          </Text>
-          <Text style={styles.nameLucusText}>Name: {item.name}</Text>
-        </View>
-      </View>
-      </Background>
-    }
-    keyExtractor={item=>item.id}
-    showsVerticalScrollIndicator={false}
+        data={posts}
+        renderItem={({ item }) => (
+          <Background>
+            <View style={styles.androidLarge1}>
+              <View style={styles.cardView}>
+                <View style={styles.rectangleView} />
+                <Image
+                  style={styles.rocksWaterPlanets157183384Icon}
+                  resizeMode="cover"
+                  source={{ uri: item.postImg }}
+                />
+                <Text style={styles.tractorText}>{item.post}</Text>
+                <Text style={styles.hourText}>{item.timeperhr} / Hour</Text>
+                <Text style={styles.contactNo918392942424}>
+                  Contact No: {item.number}
+                </Text>
+                <Text style={styles.emailBsjefgmailcomText}>
+                  Email: {item.email}
+                </Text>
+                <Text style={styles.nameLucusText}>Name: {item.name}</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.rentNowButton}
+                onPress={() => navigation.navigate("RentItemScreen", { item })}
+              >
+                <Text style={styles.rentNowButtonText}>Rent Now</Text>
+              </TouchableOpacity>
+            </View>
+          </Background>
+        )}
+        keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -163,16 +200,22 @@ const styles = StyleSheet.create({
     height: 355,
   },
   androidLarge1: {
-    alignItems:"center",
+    alignItems: "center",
     backgroundColor: "#fff",
     flex: 1,
     height: 450,
     overflow: "hidden",
   },
+  rentNowButton: {
+    backgroundColor: "blue",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    alignItems: "center",
+  },
+  rentNowButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 });
-
-
-
-
-
-

@@ -6,12 +6,12 @@ import 'firebase/compat/storage'
 
 
 export const firebaseConfig = {
-  apiKey: "Your_API_KEY",
-  authDomain: "ENTER_YOUR_credential",
-  projectId: "ENTER_YOUR_credential",
-  storageBucket: "ENTER_YOUR_credential",
-  messagingSenderId: "ENTER_YOUR_credential",
-  appId: "ENTER_YOUR_credential"
+  apiKey: "AIzaSyDcMNFRV2RfoRZzLHelTGEqgwA1U6M9Rdg",
+  authDomain: "farmapp-1fec6.firebaseapp.com",
+  projectId: "farmapp-1fec6",
+  storageBucket: "farmapp-1fec6.appspot.com",
+  messagingSenderId: "482642223048",
+  appId: "1:482642223048:web:179f9f444b88c15c636afd"
 };
 
 // Initialize Firebase

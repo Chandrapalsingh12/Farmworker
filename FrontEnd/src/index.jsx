@@ -36,7 +36,7 @@ const Home = ({navigation}) => {
     };
 
     const confirmCode = () => {
-      navigation.navigate('Main')
+      // navigation.navigate('Main')
      auth.onAuthStateChanged(user => {
         if (user) {
           navigation.navigate('Main')
@@ -110,7 +110,3 @@ const Home = ({navigation}) => {
 export default Home
 
 const styles = StyleSheet.create({});
-
-
-
-// 

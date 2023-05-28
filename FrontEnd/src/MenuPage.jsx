@@ -3,16 +3,25 @@ import React from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 
 import HomeMain from './HomeMain';
+import RentItemScreen from '../Nevigator/screen/RentItemScreen';
+import { createStackNavigator } from '@react-navigation/stack';
+
+
+
  
 
 const MenuPage=()=> {
+  const Stack = createStackNavigator()
   return (
-    <NavigationContainer independent={true}>
+    <>
+
       <HomeMain />
-    </NavigationContainer>
+    {/* <NavigationContainer independent={true}>
+    </NavigationContainer> */}
+    
+    </>
   )
 }
 
-const styles = StyleSheet.create({})
 
 export default MenuPage;
